@@ -1,0 +1,8 @@
+dist
+EasyStore.egg-info
+.coverage
+store.estore
+substore.sbstore
+substore.sbstore.meta
+.idea
+*.pyc

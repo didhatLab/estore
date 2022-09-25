@@ -1,0 +1,4 @@
+student_id[pk] name surname
+#hashes
+student_id 1 2 3 4
+#endhashes
