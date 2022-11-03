@@ -32,7 +32,8 @@ jobs:
       - name: Running tests
         run: |
           cd tests
-          coverage run python -m unittest discover -t ../
+          python -m unittest discover -t ../
+          coverage run -m unittest discover -t ../
           coverage report
           cd ../
       - name: mypy
