@@ -3,7 +3,7 @@ import abc
 import pathlib
 
 from dataclasses import dataclass
-from typing import Set, Dict, List, Optional, Any, Callable
+from typing import Set, Dict, List, Optional, Any, Callable, Iterable, Type
 
 
 class Validator(enum.Enum):
@@ -44,7 +44,7 @@ class SpecInfo:
     fields_configs: Dict[str, List[str]]
 
 
-def go_to_store_point(file, point: FilePoints):
+def go_to_store_point(file, point: str):
     line = file.readline()
     while line.replace("\n", "") != point:
         line = file.readline()
@@ -52,7 +52,7 @@ def go_to_store_point(file, point: FilePoints):
     return file
 
 
-def read_data_until_point(file, point: FilePoints):
+def read_data_until_point(file, point: str) -> Iterable[str]:
     line = file.readline()
 
     while line.replace("\n", "") != point:
@@ -97,7 +97,7 @@ class Record(AbstractRecord):
         return self.__dict__.get(item, None)
 
 
-def params2record(func: Callable[[object, Record], Any]):
+def params2record(func: Callable[[Any, Record], Any]):
     def decorator(obj, spec: List[str], *args, **names_params):
         record = Record(spec, *args, **names_params)
         return func(obj, record)
