@@ -2,7 +2,7 @@ import abc
 import pathlib
 
 from dataclasses import dataclass
-from typing import List, Dict, Set, Optional
+from typing import List, Dict, Set, Optional, Iterable
 
 from easystore.utilis import (config2validator_type,
                               MetaInfo,
@@ -102,8 +102,8 @@ class MetaSubStoreUpdater(AbstractMetaSubStoreUpdater):
                     key_values_for_inserting[key_name].append(key_value)
         self.__update_meta_pk_hashes(key_values_for_deleting, key_values_for_inserting)
 
-    def __update_meta_pk_hashes(self, key_values_for_deleting: Dict[str, Set],
-                                key_values_for_inserting: Dict[str, List]):
+    def __update_meta_pk_hashes(self, key_values_for_deleting: Dict[str, Set[str]],
+                                key_values_for_inserting: Dict[str, List[str]]):
         temp_meta = pathlib.Path(f"{self.__meta_sub_store_path.parent}/"
                                  f"{self.__meta_sub_store_path.name}.temp")
         with self.__meta_sub_store_path.open(mode="r") as stm:
@@ -114,9 +114,9 @@ class MetaSubStoreUpdater(AbstractMetaSubStoreUpdater):
                 for line in read_data_until_point(stm, FilePoints.PK_SETS_END):
                     pk_name, *pk_list = line.split()
                     pk_set = set(pk_list)
-                    for pk_for_delete in key_values_for_deleting.get(pk_name):
+                    for pk_for_delete in key_values_for_deleting.get(pk_name, []):
                         pk_set.remove(str(pk_for_delete))
-                    for pk_for_adding in key_values_for_inserting.get(pk_name):
+                    for pk_for_adding in key_values_for_inserting.get(pk_name, []):
                         pk_set.add(pk_for_adding)
                     query = f"{pk_name} {' '.join([str(pk) for pk in pk_set])}\n"
                     stm_temp.write(query)

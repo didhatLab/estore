@@ -35,15 +35,15 @@ class AbstractEasyStore(metaclass=abc.ABCMeta):
 class AbstractSubStore(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
-    def get_all(self) -> List["AbstractRecord"]:
+    def get_all(self) -> List["Record"]:
         return self.get_many()
 
     @abc.abstractmethod
-    def get_many(self, **conditions) -> List["AbstractRecord"]:
+    def get_many(self, **conditions) -> List["Record"]:
         raise NotImplementedError()
 
     @abc.abstractmethod
-    def get_one(self, **conditions) -> "AbstractRecord":
+    def get_one(self, **conditions) -> Optional["Record"]:
         raise NotImplementedError()
 
     @abc.abstractmethod
@@ -186,7 +186,7 @@ class SubStore(AbstractSubStore):
         for name, value in new_params.items():
             setattr(record, name, value)
         self.delete_one(**conditions)
-        new = dict(record)
+        new = vars(record)
         for name, value in new.items():
             try:
                 new[name] = int(value)
