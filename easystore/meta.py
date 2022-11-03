@@ -27,9 +27,6 @@ class AbstractMetaSubStoreHandler(metaclass=abc.ABCMeta):
 
 class AbstractMetaSubStoreUpdater(metaclass=abc.ABCMeta):
     pass
-    # @abc.abstractmethod
-    # def update_meta_pk_hashes(self, pk_name: str, pk_key: int):
-    #     pass
 
 
 class MetaSubStoreHandler(AbstractMetaSubStoreHandler):

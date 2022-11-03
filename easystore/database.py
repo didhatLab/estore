@@ -1,10 +1,8 @@
 import abc
-import os
 import pathlib
 
-from typing import Optional, List, Any, Generator
+from typing import Optional, List, Generator
 from dataclasses import dataclass
-from itertools import zip_longest
 
 from easystore.substorecreator import SubStoreCreator
 from easystore.utilis import go_to_store_point, read_data_until_point, FilePoints
@@ -50,7 +48,7 @@ class AbstractSubStore(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def insert_one(self, *args, **kwargs):
-        raise NotImplementedError
+        raise NotImplementedError()
 
 
 class EasyStore(AbstractEasyStore):
