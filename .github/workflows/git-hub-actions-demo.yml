@@ -19,7 +19,9 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Display version
-        run: python -c "import sys; print(sys.version)"
+        run: |
+          python -c "import sys; print(sys.version)"
+          ls
       - name: Install dependencies
         run: | 
           python -m pip install --upgrade pip
