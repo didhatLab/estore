@@ -1,7 +1,7 @@
 import abc
 import enum
 
-from typing import List, Callable, TypeVar
+from typing import List, Callable, Dict
 
 from easystore.utilis import MetaInfo, Validator
 from easystore import errors
@@ -59,6 +59,7 @@ class ParamForFieldValidator(AbstractForFieldValidator):
 
         if config == Validator.pk:
             return self._pk_validator
+        return lambda n, v: 1
 
     def _pk_validator(self, param_name: str, value: int, inserting=True):
         if not isinstance(value, int):
@@ -70,7 +71,7 @@ class ParamForFieldValidator(AbstractForFieldValidator):
             self.__pk_validator(param_name, value)
 
     def __pk_validator(self, param_name: str, value: int):
-        hash_set_of_exists_keys = self.__pk_sets.get(param_name, {})
+        hash_set_of_exists_keys = self.__pk_sets.get(param_name, set())
         if value in hash_set_of_exists_keys:
             raise errors.UniqueKeyError("Key {} exists in SubStore {}".format(value, self.__sub_store_name))
         return

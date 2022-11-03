@@ -6,3 +6,4 @@ substore.sbstore
 substore.sbstore.meta
 .idea
 *.pyc
+.mypy_cache
