@@ -1,6 +1,5 @@
 name: Python Package
 
-on: [push]
 
 jobs:
   build:
