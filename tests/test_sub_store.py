@@ -272,3 +272,15 @@ class TestInsertDeleteOperationsWithMeta(TestCase):
         self.assertEqual(1, res)
         res = self.sub_store.insert_one(id=1, name="kek")
         self.assertEqual(1, res)
+
+    def test_update_one(self):
+        res = self.sub_store.update_one({"id": 1}, {"name": "kek"})
+        self.assertEqual(1, res)
+        updated_person = self.sub_store.get_one(id=1)
+        self.assertEqual("kek", updated_person.name)
+        self.assertEqual("1", updated_person.id)
+
+    def test_update_one_with_pk_error(self):
+
+        with self.assertRaises(UniqueKeyError):
+            self.sub_store.update_one({"id": 1}, {"id": 2})

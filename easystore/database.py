@@ -120,6 +120,9 @@ class SubStore(AbstractSubStore):
     def insert_one(self, *args, **kwargs) -> int:
         return self._insert_one(*args, **kwargs)
 
+    def update_one(self, conditions: dict, new_params: dict) -> int:
+        return self._update_one(conditions, new_params)
+
     def delete_one(self, **conditions) -> int:
         return self._delete_one(**conditions)
 
@@ -138,6 +141,11 @@ class SubStore(AbstractSubStore):
     def _insert_one(self, *args, **kwargs) -> int:
         self.__check_fields(inserting=True, **kwargs)
         return self.__insert_one(self.spec, *args, **kwargs)
+
+    def _update_one(self, conditions: dict, new_values: dict) -> int:
+        self.__check_fields(inserting=False, **conditions)
+        self.__check_fields(inserting=True, **new_values)
+        return self.__update_one(conditions, new_values)
 
     def _delete_one(self, **conditions) -> int:
         self.__check_fields(**conditions)
@@ -172,6 +180,21 @@ class SubStore(AbstractSubStore):
         inserted_record = Record(self.spec, **params)
         self.__sub_store_meta_updater.update_meta_pk_hashes(inserted_records=[inserted_record])
         return inserted_rows
+
+    def __update_one(self, conditions: dict, new_params: dict):
+        record = self.get_one(**conditions)  # TODO: repair this hardcore code D:
+        for name, value in new_params.items():
+            setattr(record, name, value)
+        self.delete_one(**conditions)
+        new = dict(record)
+        for name, value in new.items():
+            try:
+                new[name] = int(value)
+            except ValueError:
+                pass
+
+        res = self.insert_one(**new)
+        return res
 
     def __delete_one(self, **conditions) -> int:
         result = 0
@@ -248,4 +271,3 @@ class SubStore(AbstractSubStore):
             if record[cond_name] != str(cond_value):
                 result = False
         return result
-
