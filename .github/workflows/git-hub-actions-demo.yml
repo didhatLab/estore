@@ -29,4 +29,4 @@ jobs:
       - name: Running tests
         run: |
           cd tests
-          python -m unittest discover -s /home/dan/dblabs/dbms -t /home/dan/dblabs/dbms
+          python -m unittest discover -s dblabs/dbms -t dblabs/dbms
