@@ -33,3 +33,7 @@ jobs:
           cd tests
           python -m unittest discover -t ../
           cd ../
+          coverage report
+      - name: mypy
+        run: |
+          mypy easystore
